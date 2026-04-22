@@ -21,7 +21,7 @@ class AppTheme {
         elevation: 0,
         titleTextStyle: GoogleFonts.poppins(
           color: secondaryColor,
-          fontSize: 18.sp, // Responsive font size
+          fontSize: 18.sp, 
           fontWeight: FontWeight.w600,
         ),
         iconTheme: const IconThemeData(color: secondaryColor),
