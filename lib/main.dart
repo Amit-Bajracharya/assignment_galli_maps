@@ -11,5 +11,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-     home: ,
-  );}}
+      title: 'Galli Map App',
+      theme: ThemeData(
+        colorSchemeSeed: const Color(0xFF1A73E8),
+        useMaterial3: true,
+      ),
+      home: const Scaffold(
+        body: Center(child: Text('Map Loading...')),
+      ),
+    );
+  }
+}
