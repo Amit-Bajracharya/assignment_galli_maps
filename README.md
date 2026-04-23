@@ -1,77 +1,111 @@
-# Galli Maps Assignment - Technical Assessment
+# Galli Maps
 
-A premium Flutter application demonstrating map integration, local data persistence, and clean architecture.
+A Flutter map application for saving and managing favorite locations.
 
-## 🚀 Key Features
+## Features
 
-- **Interactive Map Engine**: Integrated with `maplibre_gl` and Galli Maps Light Style.
-- **Location Intelligence**: Real-time reverse geocoding and current location centering.
-- **Persistent Bookmarking**: Save your favorite places locally using Hive.
-- **Custom Categorization**: Each place can be categorized (Food, Home, Work, etc.) with custom-rendered map markers.
-- **Premium UI/UX**: Responsive design using `flutter_screenutil`, smooth transitions, and high-fidelity bottom sheets.
-- **State Management**: Built with **Riverpod** for robust and reactive state handling.
+- **Interactive Map**: Displays Galli Maps using MapLibre GL
+- **Save Locations**: Tap the + button to save any location on the map
+- **Categories**: Organize places by category (Food, Home, Work, Travel, etc.)
+- **Local Storage**: All data saved locally using Hive (no internet required after first load)
+- **GPS Support**: Get your current location and center the map
+- **Entry Management**: View saved places in a list or on the map, delete when needed
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-- **Framework**: Flutter
-- **State Management**: Riverpod
-- **Local Database**: Hive (for high-performance storage)
-- **Map Service**: MapLibre GL
-- **Navigation**: GoRouter
-- **Theming**: Google Fonts (Poppins) & custom design system.
+- Flutter 3.x
+- Riverpod (state management)
+- Hive (local database)
+- MapLibre GL (map rendering)
+- GoRouter (navigation)
+- Freezed (immutable models)
 
-## 🏗️ Getting Started
+## How to Run
 
-### Prerequisites
+### Requirements
 
-- Flutter SDK (Latest Stable)
-- Android Studio / VS Code
-- A Galli Maps API Key (configured in `AppConstants`)
+- Flutter SDK 3.0 or higher
+- Android SDK (API 21+)
+- Android Studio or VS Code
 
-### Installation & Setup
+### Steps
 
-1. **Clone the repository**:
+1. Clone the repo:
    ```bash
-   git clone <repository-url>
-   cd galli_maps_assignment
+   git clone https://github.com/yourusername/galli_maps.git
+   cd galli_maps
    ```
 
-2. **Install dependencies**:
+2. Install dependencies:
    ```bash
    flutter pub get
    ```
 
-3. **Generate Models**:
-   This project uses `hive_generator` for database adapters. Run the following to generate necessary files:
+3. Generate code (for Hive adapters and Freezed):
    ```bash
    flutter pub run build_runner build --delete-conflicting-outputs
    ```
 
-4. **Run the app**:
+4. Run on emulator or device:
    ```bash
    flutter run
    ```
 
-## 📂 Project Structure
+## Building APK
+
+```bash
+flutter build apk --release
+```
+
+APK will be at: `build/app/outputs/flutter-apk/app-release.apk`
+
+## Project Structure
 
 ```
 lib/
-├── core/            # App-wide constants, themes, and routers
-├── features/        # Feature-based modular structure
-│   └── entry/       # Core "Location Entry" feature
-│       ├── data/    # Repositories & Data Sources (Hive)
-│       ├── domain/  # Entities & Use Cases
-│       └── presentation/ # Riverpod Providers & Flutter Screens
-└── main.dart        # App entry point
+├── core/
+│   ├── constants/
+│   ├── router/
+│   └── theme/
+├── features/
+│   └── entry/
+│       ├── data/
+│       │   ├── datasource/
+│       │   ├── models/
+│       │   └── repository/
+│       ├── domain/
+│       │   ├── entities/
+│       │   ├── repository/
+│       │   └── usecases/
+│       └── presentation/
+│           ├── providers/
+│           ├── screen/
+│           └── widgets/
+└── main.dart
 ```
 
-## 📝 Assessment Requirements Meta
-- [x] Map Rendering (GL-based)
-- [x] Custom Style String
-- [x] Location Permissions & Centering
-- [x] "Add Entry" Workflow (FAB & Form)
-- [x] Coordinate Selection (Crosshair)
-- [x] Data Persistence (Local Storage)
-- [x] Persistent Map Markers
-- [x] Detail View (Bottom Sheet)
-- [x] Riverpod State Management
+## Assessment Requirements
+
+All requirements from the technical assessment have been implemented:
+
+- [x] Map rendering with MapLibre GL
+- [x] Galli Maps custom style URL
+- [x] Location permissions and GPS centering
+- [x] Pin-drop location selection
+- [x] Entry form (title, description, category)
+- [x] Local data persistence with Hive
+- [x] Custom map markers by category
+- [x] Entry detail bottom sheet
+- [x] Entry deletion
+- [x] Clean Architecture (Domain/Data/Presentation)
+- [x] Riverpod state management
+
+## Submission
+
+- **GitHub Repository**: https://github.com/Amit-Bajracharya/assignment_galli_maps
+- **APK Download**: [GitHub Releases](https://github.com/Amit-Bajracharya/assignment_galli_maps/releases)
+- **Submitted by**: April 23, 2026
+
+---
+
+Built with Flutter for Galli Maps technical assessment.
