@@ -26,8 +26,7 @@ final appRouter = GoRouter(
             ),
           ],
         ),
-        
-        // BRANCH 1: SAVED (formerly Bookmarks)
+       
         StatefulShellBranch(
           routes: [
             GoRoute(
