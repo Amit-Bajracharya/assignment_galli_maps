@@ -287,10 +287,10 @@ class SavedEntriesScreen extends ConsumerWidget {
             onPressed: () {
               StatefulNavigationShell.of(context).goBranch(0);
             },
-            icon: const Icon(Icons.explore, size: 18), // slightly larger icon
+            icon: const Icon(Icons.explore, size: 18), 
             label: const Text(
               'EXPLORE MAP',
-              style: TextStyle(fontSize: 12), // slightly larger text
+              style: TextStyle(fontSize: 12), 
             ),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,
@@ -298,8 +298,8 @@ class SavedEntriesScreen extends ConsumerWidget {
               padding: EdgeInsets.symmetric(
                 horizontal: 16.w,
                 vertical: 10.h,
-              ), // moderate padding
-              minimumSize: const Size(100, 38), // wider & taller than before
+              ),
+              minimumSize: const Size(100, 38),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.r),
               ),
