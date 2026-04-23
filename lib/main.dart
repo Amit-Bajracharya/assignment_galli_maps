@@ -7,9 +7,11 @@ import 'core/router/app_routes.dart';
 import 'features/entry/data/models/entry_model.dart';
 import 'core/constants/app_constants.dart';
 
+/// App entry point. Initializes Hive database and launches the app.
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Initialize Hive for local storage
   await Hive.initFlutter();
   Hive.registerAdapter(EntryModelAdapter());
   await Hive.openBox<EntryModel>(AppConstants.entriesBoxName);
@@ -21,6 +23,7 @@ Future<void> main() async {
   );
 }
 
+/// Root widget setting up responsive design and routing.
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 

@@ -1,7 +1,10 @@
+/// Data layer model for Hive storage.
+/// Mirrors EntryEntity but with Hive annotations for serialization.
+/// Converts to/from EntryEntity for domain layer communication.
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 import '../../domain/entities/entry_entity.dart';
-
 
 part 'entry_model.freezed.dart';
 part 'entry_model.g.dart';
@@ -21,24 +24,25 @@ class EntryModel with _$EntryModel {
     @HiveField(6) required DateTime createdAt,
   }) = _EntryModel;
 
-
+  /// Creates Model from Domain Entity (for saving to Hive)
   factory EntryModel.fromEntity(EntryEntity e) => EntryModel(
-        id:          e.id,
-        title:       e.title,
+        id: e.id,
+        title: e.title,
         description: e.description,
-        categoryId:  e.categoryId,
-        latitude:    e.latitude,
-        longitude:   e.longitude,
-        createdAt:   e.createdAt,
+        categoryId: e.categoryId,
+        latitude: e.latitude,
+        longitude: e.longitude,
+        createdAt: e.createdAt,
       );
 
+  /// Converts to Domain Entity (for use in business logic)
   EntryEntity toEntity() => EntryEntity(
-        id:          id,
-        title:       title,
+        id: id,
+        title: title,
         description: description,
-        categoryId:  categoryId,
-        latitude:    latitude,
-        longitude:   longitude,
-        createdAt:   createdAt,
+        categoryId: categoryId,
+        latitude: latitude,
+        longitude: longitude,
+        createdAt: createdAt,
       );
 }
