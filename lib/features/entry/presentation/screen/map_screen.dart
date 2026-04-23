@@ -81,6 +81,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           await Geolocator.openLocationSettings();
           _handlePermissions();
         },
+        duration: const Duration(seconds: 3), // Auto-dismiss after 3 seconds
       );
       setState(() {
         _isLoadingLocation = false;
@@ -109,13 +110,14 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     _onCameraIdle();
   }
 
-  void _showErrorSnackBar(String message, {String? actionLabel, VoidCallback? onAction}) {
+  void _showErrorSnackBar(String message, {String? actionLabel, VoidCallback? onAction, Duration? duration}) {
     if (!mounted) return;
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
         backgroundColor: Colors.red,
+        duration: duration ?? const Duration(seconds: 4), // Default 4 seconds
         action: actionLabel != null
             ? SnackBarAction(
                 label: actionLabel,
