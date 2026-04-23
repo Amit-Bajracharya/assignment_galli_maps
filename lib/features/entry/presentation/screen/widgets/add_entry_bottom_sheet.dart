@@ -7,7 +7,6 @@ import 'category_icon_picker.dart';
 import '../../providers/entry_provider.dart';
 
 /// Bottom sheet for adding a new location entry.
-/// Shows form with title, description, category picker, and location info.
 class AddEntryBottomSheet extends ConsumerStatefulWidget {
   final double latitude;
   final double longitude;
@@ -31,11 +30,9 @@ class _AddEntryBottomSheetState extends ConsumerState<AddEntryBottomSheet> {
   @override
   void initState() {
     super.initState();
-    // Lookup human-readable address from coordinates
     _fetchAddress();
   }
 
-  /// Converts coordinates to address using geocoding service
   Future<void> _fetchAddress() async {
     try {
       final placemarks = await placemarkFromCoordinates(
@@ -60,7 +57,6 @@ class _AddEntryBottomSheetState extends ConsumerState<AddEntryBottomSheet> {
     super.dispose();
   }
 
-  /// Validates form and saves entry to local storage
   Future<void> _onSave() async {
     if (_titleController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(

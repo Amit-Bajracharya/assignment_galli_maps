@@ -7,23 +7,16 @@ import 'core/router/app_routes.dart';
 import 'features/entry/data/models/entry_model.dart';
 import 'core/constants/app_constants.dart';
 
-/// App entry point. Initializes Hive database and launches the app.
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize Hive for local storage
   await Hive.initFlutter();
   Hive.registerAdapter(EntryModelAdapter());
   await Hive.openBox<EntryModel>(AppConstants.entriesBoxName);
 
-  runApp(
-    const ProviderScope(
-      child: MyApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: MyApp()));
 }
 
-/// Root widget setting up responsive design and routing.
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -33,14 +26,12 @@ class MyApp extends StatelessWidget {
       designSize: const Size(360, 800),
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: (context, child) {
-        return MaterialApp.router(
-          title: 'Galli Maps',
-          debugShowCheckedModeBanner: false,
-          theme: AppTheme.lightTheme,
-          routerConfig: appRouter,
-        );
-      },
+      builder: (_, __) => MaterialApp.router(
+        title: 'Galli Maps',
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.lightTheme,
+        routerConfig: appRouter,
+      ),
     );
   }
 }
