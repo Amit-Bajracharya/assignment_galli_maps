@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../domain/entities/entry_entity.dart';
 import '../providers/entry_provider.dart';
+import 'widgets/entry_detail_bottom_sheet.dart';
 import 'widgets/map_widgets.dart';
 
 class SavedEntriesScreen extends ConsumerWidget {
@@ -21,42 +22,40 @@ class SavedEntriesScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // TOP BAR (same as map screen)
             const MapTopBar(),
-
-            // HEADER
             Padding(
-              padding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 8.h),
+              padding: EdgeInsets.fromLTRB(20.w, 0.h, 20.w, 8.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'My Places',
                     style: GoogleFonts.poppins(
-                      fontSize: 28.sp,
+                      fontSize: 21.sp,
                       fontWeight: FontWeight.w800,
                       color: const Color(0xFF2D3142),
                     ),
                   ),
-                  SizedBox(height: 4.h),
+                  SizedBox(height: 5.h),
                   Text(
                     'View and manage your saved locations',
                     style: GoogleFonts.poppins(
-                      fontSize: 13.sp,
+                      fontSize: 11.sp,
                       color: Colors.grey.shade500,
                     ),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 8.h),
-
-            // LIST OR EMPTY STATE
+            SizedBox(height: 10.h),
             Expanded(
               child: entries.isEmpty
                   ? _buildEmptyState(context)
                   : ListView.separated(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.w,
+                        vertical: 8.h,
+                      ),
                       itemCount: entries.length,
                       separatorBuilder: (_, __) => SizedBox(height: 12.h),
                       itemBuilder: (context, index) =>
@@ -66,21 +65,15 @@ class SavedEntriesScreen extends ConsumerWidget {
           ],
         ),
       ),
-      // FLOATING ADD BUTTON
-      floatingActionButton: entries.isNotEmpty
-          ? FloatingActionButton(
-              onPressed: () {
-                // Navigate back to map tab (Branch 0)
-                StatefulNavigationShell.of(context).goBranch(0);
-              },
-              backgroundColor: Colors.orange,
-              child: const Icon(Icons.add, color: Colors.white),
-            )
-          : null,
+    
     );
   }
 
-  Widget _buildEntryCard(BuildContext context, EntryEntity entry, WidgetRef ref) {
+  Widget _buildEntryCard(
+    BuildContext context,
+    EntryEntity entry,
+    WidgetRef ref,
+  ) {
     final category = kCategories.firstWhere(
       (c) => c.id == entry.categoryId,
       orElse: () => kCategories.last,
@@ -97,82 +90,87 @@ class SavedEntriesScreen extends ConsumerWidget {
         padding: EdgeInsets.only(right: 20.w),
         decoration: BoxDecoration(
           color: Colors.red.shade400,
-          borderRadius: BorderRadius.circular(16.r),
+          borderRadius: BorderRadius.circular(14.r),
         ),
         child: const Icon(Icons.delete_outline, color: Colors.white),
       ),
-      child: Container(
-        padding: EdgeInsets.all(16.w),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16.r),
-          border: Border.all(color: Colors.grey.shade100),
-        ),
-        child: Row(
-          children: [
-            // CATEGORY ICON
-            Container(
-              width: 48.w,
-              height: 48.w,
-              decoration: BoxDecoration(
-                color: Colors.orange.shade50,
-                borderRadius: BorderRadius.circular(12.r),
+      child: GestureDetector(
+        onTap: () {
+          showModalBottomSheet(
+            context: context,
+            backgroundColor: Colors.transparent,
+            isScrollControlled: true,
+            builder: (context) => EntryDetailBottomSheet(entry: entry),
+          );
+        },
+        child: Container(
+          padding: EdgeInsets.all(14.w),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(14.r),
+            border: Border.all(color: Colors.grey.shade100),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 42.w,
+                height: 42.w,
+                decoration: BoxDecoration(
+                  color: Colors.red.shade50,
+                  borderRadius: BorderRadius.circular(10.r),
+                ),
+                child: Icon(category.icon, color: Colors.red, size: 20.sp),
               ),
-              child: Icon(category.icon, color: Colors.orange, size: 24.sp),
-            ),
-            SizedBox(width: 14.w),
-
-            // DETAILS
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    entry.title,
-                    style: GoogleFonts.poppins(
-                      fontSize: 15.sp,
-                      fontWeight: FontWeight.w600,
-                      color: const Color(0xFF2D3142),
-                    ),
-                  ),
-                  if (entry.description.isNotEmpty)
+              SizedBox(width: 14.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Text(
-                      entry.description,
+                      entry.title,
                       style: GoogleFonts.poppins(
-                        fontSize: 12.sp,
-                        color: Colors.grey.shade500,
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF2D3142),
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
-                  SizedBox(height: 4.h),
-                  Row(
-                    children: [
-                      Icon(Icons.location_on, size: 12.sp, color: Colors.orange),
-                      SizedBox(width: 4.w),
+                    if (entry.description.isNotEmpty)
                       Text(
-                        '${entry.latitude.toStringAsFixed(3)},  ${entry.longitude.toStringAsFixed(3)}',
+                        entry.description,
                         style: GoogleFonts.poppins(
-                          fontSize: 11.sp,
-                          color: Colors.orange,
-                          fontWeight: FontWeight.w500,
+                          fontSize: 10.sp,
+                          color: Colors.grey.shade500,
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                    ],
-                  ),
-                ],
+                    SizedBox(height: 4.h),
+                    Row(
+                      children: [
+                        Icon(Icons.location_on, size: 10.sp, color: Colors.red),
+                        SizedBox(width: 4.w),
+                        Text(
+                          '${entry.latitude.toStringAsFixed(3)},  ${entry.longitude.toStringAsFixed(3)}',
+                          style: GoogleFonts.poppins(
+                            fontSize: 9.sp,
+                            color: Colors.red,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-
-            // RELATIVE TIME
-            Text(
-              _relativeTime(entry.createdAt),
-              style: GoogleFonts.poppins(
-                fontSize: 11.sp,
-                color: Colors.grey.shade400,
+              Text(
+                _relativeTime(entry.createdAt),
+                style: GoogleFonts.poppins(
+                  fontSize: 9.sp,
+                  color: Colors.grey.shade400,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -183,13 +181,11 @@ class SavedEntriesScreen extends ConsumerWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // PREMIUM EMPTY ILLUSTRATION
           Stack(
             alignment: Alignment.center,
             children: [
-              // Main card
               Container(
-                width: 180.w,
+                width: 190.w,
                 height: 180.w,
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -207,18 +203,17 @@ class SavedEntriesScreen extends ConsumerWidget {
                     width: 80.w,
                     height: 80.w,
                     decoration: BoxDecoration(
-                      color: Colors.orange.shade50,
+                      color: Colors.red.shade50,
                       borderRadius: BorderRadius.circular(20.r),
                     ),
                     child: Icon(
-                      Icons.bookmark_add,
+                      Icons.add_location_alt_rounded,
                       size: 40.sp,
-                      color: Colors.orange,
+                      color: Colors.red,
                     ),
                   ),
                 ),
               ),
-              // Floating search icon
               Positioned(
                 left: -20.w,
                 top: 20.h,
@@ -234,10 +229,13 @@ class SavedEntriesScreen extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  child: Icon(Icons.travel_explore, size: 20.sp, color: Colors.green),
+                  child: Icon(
+                    Icons.travel_explore,
+                    size: 20.sp,
+                    color: Colors.green,
+                  ),
                 ),
               ),
-              // Floating pin icon
               Positioned(
                 right: -10.w,
                 bottom: 10.h,
@@ -253,7 +251,11 @@ class SavedEntriesScreen extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  child: Icon(Icons.location_on, size: 20.sp, color: Colors.green.shade800),
+                  child: Icon(
+                    Icons.location_on,
+                    size: 20.sp,
+                    color: Colors.green.shade800,
+                  ),
                 ),
               ),
             ],
@@ -262,7 +264,7 @@ class SavedEntriesScreen extends ConsumerWidget {
           Text(
             'No places saved yet',
             style: GoogleFonts.poppins(
-              fontSize: 22.sp,
+              fontSize: 16.sp,
               fontWeight: FontWeight.w700,
               color: const Color(0xFF2D3142),
             ),
@@ -274,24 +276,30 @@ class SavedEntriesScreen extends ConsumerWidget {
               'Start exploring to save your favorite spots. Your personal map is waiting to be filled with adventures.',
               textAlign: TextAlign.center,
               style: GoogleFonts.poppins(
-                fontSize: 13.sp,
+                fontSize: 11.sp,
                 color: Colors.grey.shade500,
                 height: 1.5,
               ),
             ),
           ),
-          SizedBox(height: 32.h),
+          SizedBox(height: 15.h),
           ElevatedButton.icon(
             onPressed: () {
-              // Switch back to Map tab (Branch 0)
               StatefulNavigationShell.of(context).goBranch(0);
             },
-            icon: const Icon(Icons.explore),
-            label: const Text('EXPLORE MAP'),
+            icon: const Icon(Icons.explore, size: 18), // slightly larger icon
+            label: const Text(
+              'EXPLORE MAP',
+              style: TextStyle(fontSize: 12), // slightly larger text
+            ),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.orange,
+              backgroundColor: Colors.red,
               foregroundColor: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 16.h),
+              padding: EdgeInsets.symmetric(
+                horizontal: 16.w,
+                vertical: 10.h,
+              ), // moderate padding
+              minimumSize: const Size(100, 38), // wider & taller than before
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.r),
               ),
@@ -309,7 +317,8 @@ class SavedEntriesScreen extends ConsumerWidget {
     if (diff.inHours < 24) return '${diff.inHours} hours ago';
     if (diff.inDays == 1) return 'Yesterday';
     if (diff.inDays < 7) return '${diff.inDays} days ago';
-    if (diff.inDays < 30) return '${(diff.inDays / 7).floor()} week${(diff.inDays / 7).floor() > 1 ? 's' : ''} ago';
+    if (diff.inDays < 30)
+      return '${(diff.inDays / 7).floor()} week${(diff.inDays / 7).floor() > 1 ? 's' : ''} ago';
     return '${(diff.inDays / 30).floor()} month${(diff.inDays / 30).floor() > 1 ? 's' : ''} ago';
   }
 }

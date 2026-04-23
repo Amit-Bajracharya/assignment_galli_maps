@@ -16,17 +16,16 @@ class EntryDetailBottomSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Find category for icon
     final category = kCategories.firstWhere(
       (c) => c.id == entry.categoryId,
       orElse: () => kCategories.last,
     );
 
     return Container(
-      padding: EdgeInsets.all(24.w),
+      padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(32.r)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28.r)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -38,10 +37,10 @@ class EntryDetailBottomSheet extends ConsumerWidget {
               Container(
                 padding: EdgeInsets.all(12.r),
                 decoration: BoxDecoration(
-                  color: Colors.orange.shade50,
-                  borderRadius: BorderRadius.circular(16.r),
+                  color: Colors.red.shade50,
+                  borderRadius: BorderRadius.circular(14.r),
                 ),
-                child: Icon(category.icon, color: Colors.orange, size: 28.sp),
+                child: Icon(category.icon, color: Colors.red, size: 24.sp),
               ),
               SizedBox(width: 16.w),
               Expanded(
@@ -51,44 +50,34 @@ class EntryDetailBottomSheet extends ConsumerWidget {
                     Text(
                       entry.title,
                       style: GoogleFonts.poppins(
-                        fontSize: 20.sp,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w700,
                         color: const Color(0xFF2D3142),
                       ),
                     ),
-                    Row(
-                      children: [
-                        Text(
-                          category.label,
-                          style: GoogleFonts.poppins(
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.orange,
-                          ),
-                        ),
-                        Text(
-                          ' • Saved on ${entry.createdAt.day}/${entry.createdAt.month}/${entry.createdAt.year}',
-                          style: GoogleFonts.poppins(
-                            fontSize: 12.sp,
-                            color: Colors.grey.shade400,
-                          ),
-                        ),
-                      ],
+                    Text(
+                      category.label.toUpperCase(),
+                      style: GoogleFonts.poppins(
+                        fontSize: 9.sp,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.red,
+                        letterSpacing: 1.0,
+                      ),
                     ),
                   ],
                 ),
               ),
               IconButton(
                 onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.close),
+                icon: Icon(Icons.close, size: 20.sp, color: Colors.grey.shade400),
               ),
             ],
           ),
-          SizedBox(height: 24.h),
+          SizedBox(height: 20.h),
           Text(
             'DESCRIPTION',
             style: GoogleFonts.poppins(
-              fontSize: 10.sp,
+              fontSize: 9.sp,
               fontWeight: FontWeight.w600,
               color: Colors.grey.shade400,
               letterSpacing: 1.0,
@@ -98,13 +87,17 @@ class EntryDetailBottomSheet extends ConsumerWidget {
           Text(
             entry.description,
             style: GoogleFonts.poppins(
-              fontSize: 14.sp,
+              fontSize: 11.sp,
               color: const Color(0xFF2D3142),
               height: 1.5,
             ),
           ),
           SizedBox(height: 24.h),
-          _buildInfoRow(Icons.location_on_outlined, 'Coordinates', '${entry.latitude.toStringAsFixed(4)}° N, ${entry.longitude.toStringAsFixed(4)}° E'),
+          _buildInfoRow(Icons.location_on_outlined, 'Coordinates',
+              '${entry.latitude.toStringAsFixed(4)}° N, ${entry.longitude.toStringAsFixed(4)}° E'),
+          SizedBox(height: 12.h),
+          _buildInfoRow(Icons.calendar_today_outlined, 'Saved on',
+              '${entry.createdAt.day} ${_getMonth(entry.createdAt.month)} ${entry.createdAt.year}'),
           SizedBox(height: 32.h),
           Row(
             children: [
@@ -114,12 +107,16 @@ class EntryDetailBottomSheet extends ConsumerWidget {
                     ref.read(entryProvider.notifier).deleteEntry(entry.id);
                     Navigator.pop(context);
                   },
-                  icon: const Icon(Icons.delete_outline),
-                  label: const Text('Delete Place'),
+                  icon: Icon(Icons.delete_outline, size: 18.sp),
+                  label: Text('Delete Place', style: TextStyle(fontSize: 12.sp)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red.shade50,
                     foregroundColor: Colors.red,
                     elevation: 0,
+                    padding: EdgeInsets.symmetric(vertical: 10.h),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16.r),
+                    ),
                   ),
                 ),
               ),
@@ -127,12 +124,18 @@ class EntryDetailBottomSheet extends ConsumerWidget {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text('Close'),
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(vertical: 10.h),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16.r),
+                    ),
+                  ),
+                  child: Text('Close', style: TextStyle(fontSize: 12.sp)),
                 ),
               ),
             ],
           ),
-          SizedBox(height: 12.h),
+          SizedBox(height: 75.h),
         ],
       ),
     );
@@ -141,7 +144,7 @@ class EntryDetailBottomSheet extends ConsumerWidget {
   Widget _buildInfoRow(IconData icon, String label, String value) {
     return Row(
       children: [
-        Icon(icon, size: 18.sp, color: Colors.grey.shade400),
+        Icon(icon, size: 16.sp, color: Colors.grey.shade400),
         SizedBox(width: 12.w),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,7 +152,7 @@ class EntryDetailBottomSheet extends ConsumerWidget {
             Text(
               label,
               style: GoogleFonts.poppins(
-                fontSize: 10.sp,
+                fontSize: 9.sp,
                 fontWeight: FontWeight.w500,
                 color: Colors.grey.shade400,
               ),
@@ -157,7 +160,7 @@ class EntryDetailBottomSheet extends ConsumerWidget {
             Text(
               value,
               style: GoogleFonts.poppins(
-                fontSize: 13.sp,
+                fontSize: 10.sp,
                 color: const Color(0xFF2D3142),
               ),
             ),
@@ -165,5 +168,13 @@ class EntryDetailBottomSheet extends ConsumerWidget {
         ),
       ],
     );
+  }
+
+  String _getMonth(int month) {
+    const months = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+    return months[month - 1];
   }
 }

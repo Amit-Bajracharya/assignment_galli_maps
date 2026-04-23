@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class CategoryIconPicker extends StatelessWidget {
   final String selectedId;
-  final void Function(String id) onSelect;
+  final Function(String) onSelect;
 
   const CategoryIconPicker({
     super.key,
@@ -30,51 +30,47 @@ class CategoryIconPicker extends StatelessWidget {
         ),
         SizedBox(height: 12.h),
         SizedBox(
-          height: 80.h,
+          height: 65.h,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: kCategories.length,
-            separatorBuilder: (context, index) => SizedBox(width: 16.w),
+            separatorBuilder: (_, __) => SizedBox(width: 12.w),
             itemBuilder: (context, index) {
               final cat = kCategories[index];
-              final isSelected = cat.id == selectedId;
+              final isSelected = selectedId == cat.id;
               
               return GestureDetector(
                 onTap: () => onSelect(cat.id),
-                child: Column(
-                  children: [
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      padding: EdgeInsets.all(12.r),
-                      decoration: BoxDecoration(
-                        color: isSelected ? Colors.orange : Colors.grey.shade100,
-                        borderRadius: BorderRadius.circular(16.r),
-                        boxShadow: isSelected
-                            ? [
-                                BoxShadow(
-                                  color: Colors.orange.withOpacity(0.3),
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 4),
-                                )
-                              ]
-                            : [],
-                      ),
-                      child: Icon(
+                child: Container(
+                  width: 75.w,
+                  padding: EdgeInsets.symmetric(vertical: 8.h),
+                  decoration: BoxDecoration(
+                    color: isSelected ? Colors.red : Colors.grey.shade50,
+                    borderRadius: BorderRadius.circular(12.r),
+                    border: Border.all(
+                      color: isSelected ? Colors.red : Colors.grey.shade200,
+                      width: 1,
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
                         cat.icon,
-                        size: 20.sp,
-                        color: isSelected ? Colors.white : Colors.grey.shade500,
+                        color: isSelected ? Colors.white : const Color(0xFF2D3142),
+                        size: 21.sp,
                       ),
-                    ),
-                    SizedBox(height: 6.h),
-                    Text(
-                      cat.label,
-                      style: GoogleFonts.poppins(
-                        fontSize: 10.sp,
-                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                        color: isSelected ? Colors.orange : Colors.grey.shade500,
+                      SizedBox(height: 5.h),
+                      Text(
+                        cat.label,
+                        style: GoogleFonts.poppins(
+                          fontSize: 10.sp,
+                          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                          color: isSelected ? Colors.white : Colors.grey.shade500,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               );
             },

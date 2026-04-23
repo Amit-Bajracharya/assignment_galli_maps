@@ -3,8 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  // Vibrant Orange for a modern, energetic feel
-  static const primaryColor = Colors.deepOrange;
+  static const primaryColor = Colors.red;
   static const secondaryColor = Color(0xFF2D3142); 
 
   static ThemeData get lightTheme {

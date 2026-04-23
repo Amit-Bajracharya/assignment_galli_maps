@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return MaterialApp.router(
-          title: 'Galli Maps Assignment',
+          title: 'Maps Testing',
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,
           routerConfig: appRouter,

@@ -42,7 +42,6 @@ class _AddEntryBottomSheetState extends ConsumerState<AddEntryBottomSheet> {
         final p = placemarks.first;
         setState(() {
           _address = '${p.name}, ${p.locality}, ${p.country}';
-          // Auto-fill description with address if empty
           if (_descController.text.isEmpty) {
             _descController.text = _address;
           }
@@ -95,10 +94,10 @@ class _AddEntryBottomSheetState extends ConsumerState<AddEntryBottomSheet> {
         constraints: BoxConstraints(
           maxHeight: MediaQuery.of(context).size.height * 0.85,
         ),
-        padding: EdgeInsets.all(24.w),
+        padding: EdgeInsets.all(20.w),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(32.r)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(28.r)),
         ),
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -107,35 +106,33 @@ class _AddEntryBottomSheetState extends ConsumerState<AddEntryBottomSheet> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // HEADER
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     'Add New Location',
                     style: GoogleFonts.poppins(
-                      fontSize: 18.sp,
+                      fontSize: 15.sp,
                       fontWeight: FontWeight.w700,
                       color: const Color(0xFF2D3142),
                     ),
                   ),
                   GestureDetector(
                     onTap: () => Navigator.pop(context),
-                    child: Icon(Icons.close, size: 24.sp, color: Colors.grey.shade400),
+                    child: Icon(Icons.close, size: 22.sp, color: Colors.grey.shade400),
                   ),
                 ],
               ),
-              SizedBox(height: 6.h),
+              SizedBox(height: 8.h),
               Text(
                 'Save this pinpoint to your personal map.',
                 style: GoogleFonts.poppins(
-                  fontSize: 12.sp,
+                  fontSize: 11.sp,
                   color: Colors.grey.shade500,
                 ),
               ),
-              SizedBox(height: 18.h),
+              SizedBox(height: 20.h),
 
-              // FORM FIELDS
               Text(
                 'PLACE DETAILS',
                 style: GoogleFonts.poppins(
@@ -148,47 +145,45 @@ class _AddEntryBottomSheetState extends ConsumerState<AddEntryBottomSheet> {
               SizedBox(height: 16.h),
               TextField(
                 controller: _titleController,
-                decoration:  InputDecoration(
+                style: TextStyle(fontSize: 13.sp),
+                decoration: InputDecoration(
                   labelText: 'Location Name',
-                  labelStyle: TextStyle(
-                    fontSize: 12.h
-                  ),
-                  hintText: 'e.g. My Favorite Cafe',
+                  labelStyle: TextStyle(fontSize: 11.sp),
+                  hintText: 'e.g. My Nepal Cafe',
+                  hintStyle: TextStyle(fontSize: 11.sp),
                 ),
               ),
               SizedBox(height: 18.h),
               TextField(
                 controller: _descController,
                 maxLines: 2,
-                decoration:  InputDecoration(
+                style: TextStyle(fontSize: 13.sp),
+                decoration: InputDecoration(
                   labelText: 'Description / Notes',
-                   labelStyle: TextStyle(
-                    fontSize: 12.h
-                  ),
+                  labelStyle: TextStyle(fontSize: 11.sp),
                   hintText: 'What makes this place special?',
+                  hintStyle: TextStyle(fontSize: 11.sp),
                 ),
               ),
-              SizedBox(height: 12.h),
+              SizedBox(height: 14.h),
 
-              // CATEGORY PICKER
               CategoryIconPicker(
                 selectedId: _selectedCategoryId,
                 onSelect: (id) => setState(() => _selectedCategoryId = id),
               ),
-              SizedBox(height: 12.h),
+              SizedBox(height: 14.h),
 
-              // COORDINATES CARD
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.all(12.w),
+                padding: EdgeInsets.all(14.w),
                 decoration: BoxDecoration(
-                  color: Colors.orange.shade50,
-                  borderRadius: BorderRadius.circular(16.r),
+                  color: Colors.red.shade50,
+                  borderRadius: BorderRadius.circular(14.r),
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.location_on, color: Colors.orange, size: 22.sp),
-                    SizedBox(width: 12.w),
+                    Icon(Icons.location_on, color: Colors.red, size: 20.sp),
+                    SizedBox(width: 10.w),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -196,7 +191,7 @@ class _AddEntryBottomSheetState extends ConsumerState<AddEntryBottomSheet> {
                           Text(
                             '${widget.latitude.toStringAsFixed(4)}° N, ${widget.longitude.toStringAsFixed(4)}° E',
                             style: GoogleFonts.poppins(
-                              fontSize: 12.sp,
+                              fontSize: 11.sp,
                               fontWeight: FontWeight.w600,
                               color: const Color(0xFF2D3142),
                             ),
@@ -216,26 +211,25 @@ class _AddEntryBottomSheetState extends ConsumerState<AddEntryBottomSheet> {
               ),
               SizedBox(height: 24.h),
 
-              // SAVE BUTTON
               SizedBox(
                 width: double.infinity,
-                height: 48.h,
+                height: 44.h,
                 child: ElevatedButton.icon(
                   onPressed: _onSave,
-                  icon: const Icon(Icons.save),
+                  icon: Icon(Icons.save, size: 20.sp),
                   label: Text(
                     'Save Location',
                     style: GoogleFonts.poppins(
-                      fontSize: 14.sp,
+                      fontSize: 13.sp,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
+                    backgroundColor: Colors.red,
                     foregroundColor: Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16.r),
+                      borderRadius: BorderRadius.circular(20.r),
                     ),
                   ),
                 ),

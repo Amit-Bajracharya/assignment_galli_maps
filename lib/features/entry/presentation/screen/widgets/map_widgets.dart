@@ -14,20 +14,13 @@ class MapTopBar extends StatelessWidget {
         children: [
           IconButton(
             onPressed: () {},
-            icon: Icon(Icons.menu, size: 28.sp),
+            icon: Icon(Icons.menu, size: 24.sp),
           ),
-          Text(
-            'Galli Maps',
-            style: GoogleFonts.poppins(
-              fontSize: 18.sp,
-              fontWeight: FontWeight.w600,
-              color: const Color(0xFF2D3142),
-            ),
-          ),
+          
           CircleAvatar(
-            radius: 18.r,
-            backgroundColor: Colors.orange.shade100,
-            child: Icon(Icons.person, color: Colors.orange, size: 20.sp),
+            radius: 16.r,
+            backgroundColor: Colors.red.shade100,
+            child: Icon(Icons.person, color: Colors.red, size: 18.sp),
           ),
         ],
       ),
@@ -42,32 +35,32 @@ class FloatingSearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16.w),
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: BorderRadius.circular(14.r),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Row(
         children: [
-          Icon(Icons.search, color: Colors.orange, size: 22.sp),
-          SizedBox(width: 12.w),
+          Icon(Icons.search, color: Colors.red, size: 18.sp),
+          SizedBox(width: 10.w),
           Expanded(
             child: Text(
               'Search for destination...',
               style: GoogleFonts.poppins(
                 color: Colors.grey.shade500,
-                fontSize: 14.sp,
+                fontSize: 11.sp,
               ),
             ),
           ),
-          Icon(Icons.mic, color: Colors.grey.shade400, size: 22.sp),
+          Icon(Icons.mic, color: Colors.grey.shade400, size: 18.sp),
         ],
       ),
     );
@@ -90,8 +83,8 @@ class StatusBadge extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: 8.r,
-            height: 8.r,
+            width: 7.r,
+            height: 7.r,
             decoration: const BoxDecoration(
               color: Colors.green,
               shape: BoxShape.circle,
@@ -101,7 +94,7 @@ class StatusBadge extends StatelessWidget {
           Text(
             'SECURE ENCRYPTION ACTIVE',
             style: GoogleFonts.poppins(
-              fontSize: 10.sp,
+              fontSize: 9.sp,
               fontWeight: FontWeight.w600,
               color: Colors.green.shade700,
               letterSpacing: 0.5,
@@ -117,28 +110,28 @@ class LocationPreviewCard extends StatelessWidget {
   final String address;
   final double latitude;
   final double longitude;
-  final VoidCallback onAdd;
+  
 
   const LocationPreviewCard({
     super.key,
     required this.address,
     required this.latitude,
     required this.longitude,
-    required this.onAdd,
+
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(20.w),
+      padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         color: const Color(0xFFF1F3F4),
-        borderRadius: BorderRadius.vertical(top: Radius.circular(32.r)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28.r)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
-            blurRadius: 20,
+            blurRadius: 15,
             offset: const Offset(0, -5),
           ),
         ],
@@ -157,19 +150,19 @@ class LocationPreviewCard extends StatelessWidget {
                     Text(
                       'Selected Location',
                       style: GoogleFonts.poppins(
-                        fontSize: 18.sp,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w700,
                         color: const Color(0xFF2D3142),
                       ),
                     ),
-                    SizedBox(height: 4.h),
+                    SizedBox(height: 3.h),
                     Text(
                       address,
                       style: GoogleFonts.poppins(
-                        fontSize: 13.sp,
+                        fontSize: 11.sp,
                         color: Colors.grey.shade600,
                       ),
-                      maxLines: 2,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
@@ -178,24 +171,24 @@ class LocationPreviewCard extends StatelessWidget {
               Container(
                 padding: EdgeInsets.all(10.r),
                 decoration: BoxDecoration(
-                  color: Colors.orange.shade50,
+                  color: Colors.red.shade50,
                   borderRadius: BorderRadius.circular(12.r),
                 ),
-                child: Icon(Icons.gps_fixed, color: Colors.orange, size: 24.sp),
+                child: Icon(Icons.gps_fixed, color: Colors.red, size: 20.sp),
               ),
             ],
           ),
-          SizedBox(height: 20.h),
+          SizedBox(height: 16.h),
           Row(
             children: [
               _buildCoordChip('LATITUDE', '${latitude.toStringAsFixed(4)}° N'),
               SizedBox(width: 12.w),
               _buildCoordChip('LONGITUDE', '${longitude.toStringAsFixed(4)}° E'),
               const Spacer(),
-              _buildFab(),
+            
             ],
           ),
-          SizedBox(height: 10.h),
+          SizedBox(height: 75.h),
         ],
       ),
     );
@@ -206,7 +199,7 @@ class LocationPreviewCard extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: BorderRadius.circular(14.r),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -233,24 +226,5 @@ class LocationPreviewCard extends StatelessWidget {
     );
   }
 
-  Widget _buildFab() {
-    return GestureDetector(
-      onTap: onAdd,
-      child: Container(
-        padding: EdgeInsets.all(16.r),
-        decoration: BoxDecoration(
-          color: Colors.orange,
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.orange.withOpacity(0.4),
-              blurRadius: 15,
-              offset: const Offset(0, 8),
-            ),
-          ],
-        ),
-        child: Icon(Icons.push_pin, color: Colors.white, size: 28.sp),
-      ),
-    );
-  }
+ 
 }

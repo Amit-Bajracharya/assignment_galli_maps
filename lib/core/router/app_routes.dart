@@ -27,35 +27,13 @@ final appRouter = GoRouter(
           ],
         ),
         
-        // BRANCH 1: SEARCH
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: RouteConstants.search,
-              name: RouteConstants.searchName,
-              builder: (context, state) => const Scaffold(body: Center(child: Text('Search Page'))),
-            ),
-          ],
-        ),
-
-        // BRANCH 2: BOOKMARKS
+        // BRANCH 1: SAVED (formerly Bookmarks)
         StatefulShellBranch(
           routes: [
             GoRoute(
               path: RouteConstants.bookmarks,
               name: RouteConstants.bookmarksName,
               builder: (context, state) => const SavedEntriesScreen(),
-            ),
-          ],
-        ),
-
-        // BRANCH 3: HISTORY
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: RouteConstants.history,
-              name: RouteConstants.historyName,
-              builder: (context, state) => const Scaffold(body: Center(child: Text('History Page'))),
             ),
           ],
         ),

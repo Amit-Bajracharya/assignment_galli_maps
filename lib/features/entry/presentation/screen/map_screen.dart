@@ -23,10 +23,13 @@ class MapScreen extends ConsumerStatefulWidget {
 class _MapScreenState extends ConsumerState<MapScreen> {
   MapLibreMapController? _controller;
   bool _isLoadingLocation = true;
-  
+
   // Real-time location state for the bottom card
   LatLng _currentCenter = const LatLng(AppConstants.defaultLat, AppConstants.defaultLng);
   String _currentAddress = 'Fetching address...';
+
+  // User's current location for the blue circle marker
+  LatLng? _userLocation;
 
   @override
   void initState() {
@@ -35,52 +38,98 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   }
 
   Future<void> _handlePermissions() async {
-    bool serviceEnabled;
     LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      _showErrorSnackBar('Location services are disabled.');
-      setState(() => _isLoadingLocation = false);
-      return;
-    }
 
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
         _showErrorSnackBar('Location permissions are denied.');
-        setState(() => _isLoadingLocation = false);
+        permission = await Geolocator.requestPermission();
+        setState(() {
+          _isLoadingLocation = false;
+          _currentAddress = 'Location Access Denied';
+        });
+        _onCameraIdle();
         return;
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      _showErrorSnackBar('Permissions are permanently denied.');
-      setState(() => _isLoadingLocation = false);
+      _showErrorSnackBar(
+        'Location permissions are permanently denied.',
+        actionLabel: 'SETTINGS',
+        onAction: () async {
+          await Geolocator.openAppSettings();
+        },
+      );
+      setState(() {
+        _isLoadingLocation = false;
+        _currentAddress = 'Access Permanently Denied';
+      });
+      _onCameraIdle();
+      return;
+    }
+
+ 
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      _showErrorSnackBar(
+        'GPS is turned off.',
+        actionLabel: 'TURN ON',
+        onAction: () async {
+          await Geolocator.openLocationSettings();
+          _handlePermissions();
+        },
+      );
+      setState(() {
+        _isLoadingLocation = false;
+        _currentAddress = 'GPS Disabled';
+      });
+      _onCameraIdle();
       return;
     }
 
     final position = await Geolocator.getCurrentPosition();
+    final userLatLng = LatLng(position.latitude, position.longitude);
+
+    setState(() {
+      _userLocation = userLatLng;
+      _isLoadingLocation = false;
+    });
+
     _controller?.animateCamera(
-      CameraUpdate.newLatLngZoom(
-        LatLng(position.latitude, position.longitude),
-        14.0,
-      ),
+      CameraUpdate.newLatLngZoom(userLatLng, 14.0),
     );
-    setState(() => _isLoadingLocation = false);
+
+    // Only add circle if map style is already loaded, otherwise it will be added in _onStyleLoaded
+    if (_controller != null) {
+      _addUserLocationCircle();
+    }
+    _onCameraIdle();
   }
 
-  void _showErrorSnackBar(String message) {
+  void _showErrorSnackBar(String message, {String? actionLabel, VoidCallback? onAction}) {
     if (!mounted) return;
+    ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), backgroundColor: Colors.red),
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        action: actionLabel != null
+            ? SnackBarAction(
+                label: actionLabel,
+                textColor: Colors.white,
+                onPressed: onAction ?? () {},
+              )
+            : null,
+      ),
     );
   }
 
   void _onMapCreated(MapLibreMapController controller) {
     _controller = controller;
-    
+
     // Listen for camera changes while moving for real-time coordinate display
     _controller?.addListener(() {
       if (_controller != null && _controller!.isCameraMoving) {
@@ -96,8 +145,19 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     _controller?.onSymbolTapped.add(_onSymbolTapped);
     _controller?.onCircleTapped.add(_onCircleTapped);
 
-    // Load category icons and then refresh
-    _loadCategoryMarkers(controller);
+    // NOTE: Don't load markers here - wait for onStyleLoadedCallback
+    // _loadCategoryMarkers will be called after style is fully loaded
+  }
+
+  void _onStyleLoaded() {
+    debugPrint('✅ Map style loaded successfully');
+    if (_controller != null) {
+      _loadCategoryMarkers(_controller!);
+      // Also add user location circle if we have it
+      if (_userLocation != null) {
+        _addUserLocationCircle();
+      }
+    }
   }
 
   void _onCircleTapped(Circle circle) {
@@ -125,51 +185,93 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     }
   }
 
+  void _addUserLocationCircle() {
+    final controller = _controller;
+    if (controller == null || _userLocation == null) return;
+
+    try {
+      // Small solid blue dot for user location
+      controller.addCircle(
+        CircleOptions(
+          geometry: _userLocation!,
+          circleColor: '#2196F3', // Blue color
+          circleRadius: 8.0, // Small 8 meters radius
+          circleOpacity: 1.0, // Fully opaque
+          circleStrokeColor: '#FFFFFF', // White border
+          circleStrokeWidth: 3.0,
+        ),
+        {'type': 'user_location'},
+      );
+    } catch (e) {
+      debugPrint('Error adding user location circle: $e');
+    }
+  }
+
   void _refreshMarkers() {
     final controller = _controller;
-    if (controller == null) return;
+    if (controller == null) {
+      debugPrint('⚠️ Cannot refresh markers - controller is null');
+      return;
+    }
 
     final entries = ref.read(entryProvider);
-    debugPrint('Refreshing ${entries.length} categoried markers on map...');
-    
+    debugPrint('📍 Refreshing ${entries.length} markers on map...');
+
     try {
-      controller.clearSymbols();
-      controller.clearCircles().then((_) {
+      controller.clearCircles();
+      controller.clearSymbols().then((_) async {
+        debugPrint('✅ Cleared existing markers, adding ${entries.length} entries...');
+
+        // Re-add user location circle first (if available)
+        if (_userLocation != null) {
+          _addUserLocationCircle();
+          debugPrint('📍 Added user location circle');
+        }
+
         for (final entry in entries) {
-          // Use the categoryId as the icon name we loaded in _onMapCreated
-          controller.addSymbol(
+          await controller.addSymbol(
             SymbolOptions(
               geometry: LatLng(entry.latitude, entry.longitude),
-              iconImage: entry.categoryId, 
-              iconSize: 1.0, 
+              iconImage: entry.categoryId,
+              iconSize: 1.0,
             ),
             {'id': entry.id},
           );
-          
-          // Optional: Keep a small circle underneath for shadow/border effect if desired
-          controller.addCircle(
+
+          await controller.addCircle(
             CircleOptions(
               geometry: LatLng(entry.latitude, entry.longitude),
-              circleColor: '#FF9800',
-              circleRadius: 10.0,
-              circleOpacity: 0.1, // Very subtle shadow
+              circleColor: '#000000',
+              circleRadius: 15.0, // Large hit area for easy tapping
+              circleOpacity: 0.0, // Invisible hit area
             ),
+            {'id': entry.id},
           );
         }
+        debugPrint('✅ Added ${entries.length} markers to map');
       });
-    } catch (e) {
-      debugPrint('Error refreshing markers: $e');
+    } catch (e, stack) {
+      debugPrint('❌ Error refreshing markers: $e');
+      debugPrint(stack.toString());
     }
   }
 
   // Generates a custom bitmap image for a category
   Future<void> _loadCategoryMarkers(MapLibreMapController controller) async {
-    for (final category in kCategories) {
-      final bytes = await _createMarkerImage(category.icon);
-      await controller.addImage(category.id, bytes);
+    debugPrint('🎨 Loading category marker images...');
+    try {
+      for (final category in kCategories) {
+        final bytes = await _createMarkerImage(category.icon);
+        await controller.addImage(category.id, bytes);
+        debugPrint('✅ Added image for category: ${category.id}');
+      }
+      debugPrint('🎨 All category images loaded, refreshing markers...');
+      // Initial refresh once icons are loaded
+      _refreshMarkers();
+    } catch (e, stack) {
+      debugPrint('❌ Error loading category markers: $e');
+      debugPrint(stack.toString());
     }
-    // Initial refresh once icons are loaded
-    _refreshMarkers();
   }
 
   Future<Uint8List> _createMarkerImage(IconData icon) async {
@@ -178,7 +280,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     const size = 100.0;
     
     // Draw background circle
-    final paint = Paint()..color = Colors.orange;
+    final paint = Paint()..color = Colors.red;
     canvas.drawCircle(const Offset(size / 2, size / 2), size / 2, paint);
     
     // Draw border
@@ -261,7 +363,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                 zoom: AppConstants.defaultZoom,
               ),
               onMapCreated: _onMapCreated,
-              onStyleLoadedCallback: _refreshMarkers,
+              onStyleLoadedCallback: _onStyleLoaded,
               myLocationEnabled: true,
               onCameraIdle: _onCameraIdle,
               trackCameraPosition: true,
@@ -273,16 +375,8 @@ class _MapScreenState extends ConsumerState<MapScreen> {
             child: Column(
               children: [
                 const MapTopBar(),
-                SizedBox(height: 12.h),
-                const FloatingSearchBar(),
                 SizedBox(height: 16.h),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 16.0),
-                    child: StatusBadge(),
-                  ),
-                ),
+              
               ],
             ),
           ),
@@ -293,7 +387,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               padding: EdgeInsets.only(bottom: 24.h), // Offset to point tip
               child: Icon(
                 Icons.location_on,
-                color: Colors.orange,
+                color: Colors.red,
                 size: 32.sp,
               ),
             ),
@@ -305,8 +399,6 @@ class _MapScreenState extends ConsumerState<MapScreen> {
             top: 240.h,
             child: Column(
               children: [
-                _buildSideButton(Icons.layers_outlined),
-                SizedBox(height: 12.h),
                 _buildSideButton(Icons.my_location, onPressed: _handlePermissions),
               ],
             ),
@@ -321,7 +413,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               address: _currentAddress,
               latitude: _currentCenter.latitude,
               longitude: _currentCenter.longitude,
-              onAdd: _onAddLocation,
+              
             ),
           ),
 
@@ -329,16 +421,16 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           if (_isLoadingLocation)
             Container(
               color: Colors.white.withOpacity(0.8),
-              child: const Center(child: CircularProgressIndicator(color: Colors.orange)),
+              child: const Center(child: CircularProgressIndicator(color: Colors.red)),
             ),
         ],
       ),
       // ADDED Prominent FAB to make it easy to find "Add Entry"
       floatingActionButton: Padding(
-        padding: EdgeInsets.only(bottom: 120.h), // Stay above the preview card
+        padding: EdgeInsets.only(bottom: 80.h), // Stay above the preview card
         child: FloatingActionButton(
           onPressed: _onAddLocation,
-          backgroundColor: Colors.orange,
+          backgroundColor: Colors.red,
           child: const Icon(Icons.add, color: Colors.white, size: 30),
         ),
       ),

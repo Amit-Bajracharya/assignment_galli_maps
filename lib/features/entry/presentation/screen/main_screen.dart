@@ -26,7 +26,7 @@ class MainScreen extends StatelessWidget {
         ),
         child: SafeArea(
           child: SizedBox(
-            height: 72.h,
+            height: 58.h,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -38,22 +38,9 @@ class MainScreen extends StatelessWidget {
                 ),
                 _buildNavItem(
                   index: 1,
-                  icon: Icons.search,
-                  activeIcon: Icons.search,
-                  label: 'SEARCH',
-                ),
-                _buildNavItem(
-                  index: 2,
-                  icon: Icons.bookmark_outline,
-                  activeIcon: Icons.bookmark,
-                  label: 'SAVED',
-                  isElevated: true,
-                ),
-                _buildNavItem(
-                  index: 3,
-                  icon: Icons.list_alt_outlined,
-                  activeIcon: Icons.list_alt,
-                  label: 'HISTORY',
+                  icon: Icons.place_outlined,
+                  activeIcon: Icons.place,
+                  label: 'Your Places',
                 ),
               ],
             ),
@@ -84,12 +71,12 @@ class MainScreen extends StatelessWidget {
               Container(
                 padding: EdgeInsets.all(12.r),
                 decoration: BoxDecoration(
-                  color: isActive ? Colors.orange : Colors.orange.shade50,
+                  color: isActive ? Colors.red : Colors.red.shade50,
                   shape: BoxShape.circle,
                   boxShadow: isActive
                       ? [
                           BoxShadow(
-                            color: Colors.orange.withOpacity(0.3),
+                            color: Colors.red.withOpacity(0.3),
                             blurRadius: 12,
                             offset: const Offset(0, 4),
                           ),
@@ -98,23 +85,23 @@ class MainScreen extends StatelessWidget {
                 ),
                 child: Icon(
                   isActive ? activeIcon : icon,
-                  size: 22.sp,
-                  color: isActive ? Colors.white : Colors.orange,
+                  size: 20.sp,
+                  color: isActive ? Colors.white : Colors.red,
                 ),
               )
             else
               Icon(
                 isActive ? activeIcon : icon,
-                size: 24.sp,
-                color: isActive ? Colors.orange : Colors.grey.shade400,
+                size: 22.sp,
+                color: isActive ? Colors.red : Colors.grey.shade400,
               ),
             if (!isElevated) SizedBox(height: 4.h),
             Text(
               label,
               style: GoogleFonts.poppins(
-                fontSize: 9.sp,
+                fontSize: 10.sp,
                 fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
-                color: isActive ? Colors.orange : Colors.grey.shade400,
+                color: isActive ? Colors.red : Colors.grey.shade400,
               ),
             ),
           ],
