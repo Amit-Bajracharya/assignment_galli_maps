@@ -16,7 +16,7 @@ final appRouter = GoRouter(
         return MainScreen(navigationShell: navigationShell);
       },
       branches: [
-        // BRANCH 0: MAP
+    
         StatefulShellBranch(
           routes: [
             GoRoute(
@@ -26,8 +26,7 @@ final appRouter = GoRouter(
             ),
           ],
         ),
-        
-        // BRANCH 1: SAVED (formerly Bookmarks)
+       
         StatefulShellBranch(
           routes: [
             GoRoute(
