@@ -37,8 +37,15 @@ class EntryNotifier extends StateNotifier<List<EntryEntity>> {
     required double latitude, 
     required double longitude
   }) async {
-    final entry = EntryEntity(id: const Uuid().v4(), //generate unique id for each entry
-     title: title, description: description, categoryId: categoryId, latitude: latitude, longitude: longitude, createdAt: DateTime.now());
+    final entry = EntryEntity(
+      id: const Uuid().v4(),
+      title: title,
+      description: description,
+      categoryId: categoryId,
+      latitude: latitude,
+      longitude: longitude,
+      createdAt: DateTime.now(),
+    );
      await _add.execute(entry);
      await loadEntries();
   }

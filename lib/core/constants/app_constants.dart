@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AppConstants {
-  // Galli Maps Style URL
   static const String mapStyleUrl =
       'https://map-init.gallimap.com/styles/light/style.json';
-
-  // Hive Box Name
   static const String entriesBoxName = 'entries_box';
-
-  // Default Map Location 
   static const double defaultLat  = 27.7172;
   static const double defaultLng  = 85.3240;
   static const double defaultZoom = 12.0;

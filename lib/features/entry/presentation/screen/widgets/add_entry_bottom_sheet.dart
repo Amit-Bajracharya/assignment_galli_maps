@@ -42,9 +42,6 @@ class _AddEntryBottomSheetState extends ConsumerState<AddEntryBottomSheet> {
         final p = placemarks.first;
         setState(() {
           _address = '${p.name}, ${p.locality}, ${p.country}';
-          if (_descController.text.isEmpty) {
-            _descController.text = _address;
-          }
         });
       }
     } catch (_) {

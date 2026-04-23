@@ -9,8 +9,7 @@ import 'core/constants/app_constants.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // Initialize Hive
+
   await Hive.initFlutter();
   Hive.registerAdapter(EntryModelAdapter());
   await Hive.openBox<EntryModel>(AppConstants.entriesBoxName);
@@ -28,12 +27,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: const Size(360, 800), // Adjusted design size to match image aspect ratio
+      designSize: const Size(360, 800),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
         return MaterialApp.router(
-          title: 'Maps Testing',
+          title: 'Galli Maps',
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,
           routerConfig: appRouter,

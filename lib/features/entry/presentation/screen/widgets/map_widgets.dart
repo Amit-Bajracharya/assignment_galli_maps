@@ -28,83 +28,9 @@ class MapTopBar extends StatelessWidget {
   }
 }
 
-class FloatingSearchBar extends StatelessWidget {
-  const FloatingSearchBar({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16.w),
-      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.search, color: Colors.red, size: 18.sp),
-          SizedBox(width: 10.w),
-          Expanded(
-            child: Text(
-              'Search for destination...',
-              style: GoogleFonts.poppins(
-                color: Colors.grey.shade500,
-                fontSize: 11.sp,
-              ),
-            ),
-          ),
-          Icon(Icons.mic, color: Colors.grey.shade400, size: 18.sp),
-        ],
-      ),
-    );
-  }
-}
 
-class StatusBadge extends StatelessWidget {
-  const StatusBadge({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.9),
-        borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(color: Colors.green.shade100),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 7.r,
-            height: 7.r,
-            decoration: const BoxDecoration(
-              color: Colors.green,
-              shape: BoxShape.circle,
-            ),
-          ),
-          SizedBox(width: 8.w),
-          Text(
-            'SECURE ENCRYPTION ACTIVE',
-            style: GoogleFonts.poppins(
-              fontSize: 9.sp,
-              fontWeight: FontWeight.w600,
-              color: Colors.green.shade700,
-              letterSpacing: 0.5,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class LocationPreviewCard extends StatelessWidget {
   final String address;
@@ -168,14 +94,7 @@ class LocationPreviewCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
-                padding: EdgeInsets.all(10.r),
-                decoration: BoxDecoration(
-                  color: Colors.red.shade50,
-                  borderRadius: BorderRadius.circular(12.r),
-                ),
-                child: Icon(Icons.gps_fixed, color: Colors.red, size: 20.sp),
-              ),
+            
             ],
           ),
           SizedBox(height: 16.h),

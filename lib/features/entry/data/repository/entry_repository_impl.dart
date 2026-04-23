@@ -15,14 +15,13 @@ class EntryRepositoryImpl implements EntryRepository{
   }
 
   @override
-  Future<void> deleteEntry(String id) async{
-    // TODO: implement deleteEntity
+  Future<void> deleteEntry(String id) async {
     await datasource.delete(id);
   }
 
   @override
   Future<List<EntryEntity>> getAllEntries() async {
-    // TODO: implement getAllEntities
     final models = await datasource.getAll();
     return models.map((m) => m.toEntity()).toList();
-  }}
+  }
+}
