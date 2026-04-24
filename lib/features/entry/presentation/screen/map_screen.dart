@@ -96,14 +96,13 @@ class _MapScreenState extends ConsumerState<MapScreen> with WidgetsBindingObserv
           await Geolocator.openLocationSettings();
         },
         duration: const Duration(seconds: 3),
-        actionColor: Colors.green,
       );
-      setState(() {
-        _isLoadingLocation = false;
-        _currentAddress = 'GPS Disabled';
-      });
-      _onCameraIdle();
       return;
+    }
+
+    // GPS is enabled - dismiss any existing snackbar
+    if (mounted) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
     }
 
     final position = await Geolocator.getCurrentPosition();
@@ -135,7 +134,7 @@ class _MapScreenState extends ConsumerState<MapScreen> with WidgetsBindingObserv
         action: actionLabel != null
             ? SnackBarAction(
                 label: actionLabel,
-                textColor: actionColor ?? Colors.white,
+                textColor: Colors.white,
                 onPressed: onAction ?? () {},
               )
             : null,
@@ -202,6 +201,13 @@ class _MapScreenState extends ConsumerState<MapScreen> with WidgetsBindingObserv
     if (controller == null || _userLocation == null) return;
 
     try {
+      // Remove old user location circles before adding new one
+      controller.circles.forEach((circle) {
+        if (circle.data?['type'] == 'user_location') {
+          controller.removeCircle(circle);
+        }
+      });
+
       controller.addCircle(
         CircleOptions(
           geometry: _userLocation!,
@@ -239,6 +245,13 @@ class _MapScreenState extends ConsumerState<MapScreen> with WidgetsBindingObserv
               geometry: LatLng(entry.latitude, entry.longitude),
               iconImage: entry.categoryId,
               iconSize: 1.0,
+              textField: entry.title,
+              textSize: 12.0,
+              textOffset: const Offset(0, 1.5),
+              textColor: '#000000',
+              textHaloColor: '#FFFFFF',
+              textHaloWidth: 2.0,
+              textAnchor: 'top',
             ),
             {'id': entry.id},
           );
@@ -415,7 +428,7 @@ class _MapScreenState extends ConsumerState<MapScreen> with WidgetsBindingObserv
         ],
       ),
       floatingActionButton: Padding(
-        padding: EdgeInsets.only(bottom: 80.h),
+        padding: EdgeInsets.only(bottom: 100.h),
         child: FloatingActionButton(
           onPressed: _onAddLocation,
           backgroundColor: Colors.red,

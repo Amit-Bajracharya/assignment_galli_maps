@@ -105,13 +105,12 @@ flutter:
 flutter_native_splash:
   color: "#ffffff"
   image: assets/logo.png
-  branding: assets/logo.png
-  branding_mode: bottom
-  branding_bottom_padding: 24
+  android_gravity: center
+  ios_content_mode: scaleAspectFit
   fullscreen: true
   android_12:
-    image: assets/logo.png
     color: "#ffffff"
+    image: assets/logo1.png
 
 flutter_launcher_icons:
   android: "launcher_icon"
