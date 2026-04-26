@@ -5,6 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'core/theme/app_theme.dart';
 import 'core/router/app_routes.dart';
 import 'features/entry/data/models/entry_model.dart';
+import 'features/entry/data/datasource/entry_local_datasource.dart';
+import 'features/entry/data/repository/entry_repository_impl.dart';
+import 'features/entry/presentation/providers/entry_provider.dart';
 import 'core/constants/app_constants.dart';
 
 void main() async {
@@ -14,7 +17,16 @@ void main() async {
   Hive.registerAdapter(EntryModelAdapter());
   await Hive.openBox<EntryModel>(AppConstants.entriesBoxName);
 
-  runApp(const ProviderScope(child: MyApp()));
+  // Composition Root - Dependency Injection
+  final datasource = EntryLocalDatasource();
+  final repository = EntryRepositoryImpl(datasource);
+
+  runApp(ProviderScope(
+    overrides: [
+      repositoryProvider.overrideWithValue(repository),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

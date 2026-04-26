@@ -1,14 +1,15 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:galli_maps_assignment/features/entry/data/datasource/entry_local_datasource.dart';
-import 'package:galli_maps_assignment/features/entry/data/repository/entry_repository_impl.dart';
 import 'package:galli_maps_assignment/features/entry/domain/entities/entry_entity.dart';
+import 'package:galli_maps_assignment/features/entry/domain/repository/entry_repository.dart';
 import 'package:galli_maps_assignment/features/entry/domain/usecases/add_entry_usecase.dart';
 import 'package:galli_maps_assignment/features/entry/domain/usecases/delete_entry_usecase.dart';
 import 'package:galli_maps_assignment/features/entry/domain/usecases/get_all_entity_usecase.dart';
 import 'package:uuid/uuid.dart';
 
-final datasourceProvider = Provider((ref) => EntryLocalDatasource());
-final repositoryProvider = Provider((ref) => EntryRepositoryImpl(ref.read(datasourceProvider)));
+/// Repository provider - overridden in composition root (main.dart)
+final repositoryProvider = Provider<EntryRepository>((ref) {
+  throw UnimplementedError('Repository must be overridden in ProviderScope');
+});
 final addUseCaseProvider = Provider((ref) => AddEntryUsecase(ref.read(repositoryProvider)));
 final getUseCaseProvider = Provider((ref) => GetAllEntityUsecase(ref.read(repositoryProvider)));
 final deleteUseCaseProvider = Provider((ref) => DeleteEntryUsecase(ref.read(repositoryProvider)));
