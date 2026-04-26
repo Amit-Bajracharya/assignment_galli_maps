@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:galli_maps_assignment/features/locations/domain/entities/entry_entity.dart';
-import 'package:galli_maps_assignment/features/locations/domain/repository/entry_repository.dart';
-import 'package:galli_maps_assignment/features/locations/domain/usecases/add_entry_usecase.dart';
-import 'package:galli_maps_assignment/features/locations/domain/usecases/delete_entry_usecase.dart';
-import 'package:galli_maps_assignment/features/locations/domain/usecases/get_all_entity_usecase.dart';
+import 'package:galli_maps_assignment/features/places/domain/entities/entry_entity.dart';
+import 'package:galli_maps_assignment/features/places/domain/repository/entry_repository.dart';
+import 'package:galli_maps_assignment/features/places/domain/usecases/add_entry_usecase.dart';
+import 'package:galli_maps_assignment/features/places/domain/usecases/delete_entry_usecase.dart';
+import 'package:galli_maps_assignment/features/places/domain/usecases/get_all_entity_usecase.dart';
 import 'package:uuid/uuid.dart';
 
 /// Repository provider - overridden in composition root (main.dart)

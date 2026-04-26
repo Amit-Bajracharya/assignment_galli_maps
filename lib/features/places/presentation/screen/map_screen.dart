@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:galli_maps_assignment/features/locations/presentation/screen/widgets/map_widgets.dart';
+import 'package:galli_maps_assignment/features/places/presentation/screen/widgets/map_widgets.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:galli_maps_assignment/features/locations/presentation/screen/widgets/entry_detail_bottom_sheet.dart';
-import 'package:galli_maps_assignment/features/locations/presentation/screen/widgets/add_entry_bottom_sheet.dart';
+import 'package:galli_maps_assignment/features/places/presentation/screen/widgets/entry_detail_bottom_sheet.dart';
+import 'package:galli_maps_assignment/features/places/presentation/screen/widgets/add_entry_bottom_sheet.dart';
 import 'dart:ui' as ui;
 import 'dart:math' show Point;
 import 'package:flutter/services.dart';

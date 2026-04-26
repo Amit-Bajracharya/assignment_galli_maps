@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../constants/route_constants.dart';
-import '../../features/locations/presentation/screen/main_screen.dart';
-import '../../features/locations/presentation/screen/map_screen.dart';
-import '../../features/locations/presentation/screen/saved_entries_screen.dart';
+import '../../features/places/presentation/screen/main_screen.dart';
+import '../../features/places/presentation/screen/map_screen.dart';
+import '../../features/places/presentation/screen/saved_entries_screen.dart';
 
 final rootNavigatorKey = GlobalKey<NavigatorState>();
 

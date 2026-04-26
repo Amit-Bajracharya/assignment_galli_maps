@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:galli_maps_assignment/core/constants/app_constants.dart';
-import 'package:galli_maps_assignment/features/locations/domain/entities/entry_entity.dart';
-import 'package:galli_maps_assignment/features/locations/presentation/providers/entry_provider.dart';
+import 'package:galli_maps_assignment/features/places/domain/entities/entry_entity.dart';
+import 'package:galli_maps_assignment/features/places/presentation/providers/entry_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class EntryDetailBottomSheet extends ConsumerWidget {

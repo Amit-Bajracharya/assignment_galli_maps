@@ -1,5 +1,5 @@
-import 'package:galli_maps_assignment/features/locations/domain/entities/entry_entity.dart';
-import 'package:galli_maps_assignment/features/locations/domain/repository/entry_repository.dart';
+import 'package:galli_maps_assignment/features/places/domain/entities/entry_entity.dart';
+import 'package:galli_maps_assignment/features/places/domain/repository/entry_repository.dart';
 
 /// Use case for adding a new entry.
 class AddEntryUsecase {
