@@ -1,4 +1,4 @@
-import 'package:galli_maps_assignment/features/entry/domain/repository/entry_repository.dart';
+import 'package:galli_maps_assignment/features/locations/domain/repository/entry_repository.dart';
 
 /// Use case for deleting an entry by ID.
 class DeleteEntryUsecase {

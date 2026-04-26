@@ -4,10 +4,10 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'core/theme/app_theme.dart';
 import 'core/router/app_routes.dart';
-import 'features/entry/data/models/entry_model.dart';
-import 'features/entry/data/datasource/entry_local_datasource.dart';
-import 'features/entry/data/repository/entry_repository_impl.dart';
-import 'features/entry/presentation/providers/entry_provider.dart';
+import 'features/locations/data/models/entry_model.dart';
+import 'features/locations/data/datasource/entry_local_datasource.dart';
+import 'features/locations/data/repository/entry_repository_impl.dart';
+import 'features/locations/presentation/providers/entry_provider.dart';
 import 'core/constants/app_constants.dart';
 
 void main() async {

@@ -1,4 +1,4 @@
-import 'package:galli_maps_assignment/features/entry/domain/entities/entry_entity.dart';
+import 'package:galli_maps_assignment/features/locations/domain/entities/entry_entity.dart';
 
 /// Repository interface for entry data operations.
 abstract class EntryRepository {

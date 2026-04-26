@@ -1,7 +1,7 @@
-import 'package:galli_maps_assignment/features/entry/data/datasource/entry_local_datasource.dart';
-import 'package:galli_maps_assignment/features/entry/data/models/entry_model.dart';
-import 'package:galli_maps_assignment/features/entry/domain/entities/entry_entity.dart';
-import 'package:galli_maps_assignment/features/entry/domain/repository/entry_repository.dart';
+import 'package:galli_maps_assignment/features/locations/data/datasource/entry_local_datasource.dart';
+import 'package:galli_maps_assignment/features/locations/data/models/entry_model.dart';
+import 'package:galli_maps_assignment/features/locations/domain/entities/entry_entity.dart';
+import 'package:galli_maps_assignment/features/locations/domain/repository/entry_repository.dart';
 
 /// Repository implementation bridging domain and data layers.
 class EntryRepositoryImpl implements EntryRepository {

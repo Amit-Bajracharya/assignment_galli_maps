@@ -41,12 +41,24 @@ class _AddEntryBottomSheetState extends ConsumerState<AddEntryBottomSheet> {
       );
       if (placemarks.isNotEmpty && mounted) {
         final p = placemarks.first;
+        final addressParts = <String>[];
+        if (p.name?.isNotEmpty == true) addressParts.add(p.name!);
+        if (p.locality?.isNotEmpty == true) addressParts.add(p.locality!);
+        if (p.country?.isNotEmpty == true) addressParts.add(p.country!);
+        
         setState(() {
-          _address = '${p.name}, ${p.locality}, ${p.country}';
+          _address = addressParts.isNotEmpty 
+              ? addressParts.join(', ')
+              : 'Coordinates: ${widget.latitude.toStringAsFixed(4)}, ${widget.longitude.toStringAsFixed(4)}';
         });
+      } else if (mounted) {
+        setState(() => _address = 'No address details available');
       }
-    } catch (_) {
-      if (mounted) setState(() => _address = 'Unknown location');
+    } on Exception catch (e) {
+      if (mounted) {
+        setState(() => _address = 'Address unavailable - check internet');
+      }
+      debugPrint('Geocoding error in bottom sheet: $e');
     }
   }
 

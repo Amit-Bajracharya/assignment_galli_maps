@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:galli_maps_assignment/features/entry/presentation/screen/widgets/map_widgets.dart';
+import 'package:galli_maps_assignment/features/locations/presentation/screen/widgets/map_widgets.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:galli_maps_assignment/features/entry/presentation/screen/widgets/entry_detail_bottom_sheet.dart';
-import 'package:galli_maps_assignment/features/entry/presentation/screen/widgets/add_entry_bottom_sheet.dart';
+import 'package:galli_maps_assignment/features/locations/presentation/screen/widgets/entry_detail_bottom_sheet.dart';
+import 'package:galli_maps_assignment/features/locations/presentation/screen/widgets/add_entry_bottom_sheet.dart';
 import 'dart:ui' as ui;
 import 'dart:math' show Point;
 import 'package:flutter/services.dart';
@@ -327,14 +327,26 @@ class _MapScreenState extends ConsumerState<MapScreen> with WidgetsBindingObserv
       );
       if (placemarks.isNotEmpty) {
         final place = placemarks.first;
+        final addressParts = <String>[];
+        if (place.name?.isNotEmpty == true) addressParts.add(place.name!);
+        if (place.locality?.isNotEmpty == true) addressParts.add(place.locality!);
+        if (place.country?.isNotEmpty == true) addressParts.add(place.country!);
+        
         setState(() {
-          _currentAddress = '${place.name}, ${place.locality}, ${place.country}';
+          _currentAddress = addressParts.isNotEmpty 
+              ? addressParts.join(', ')
+              : 'Location found (no address details)';
+        });
+      } else {
+        setState(() {
+          _currentAddress = 'No address found for this location';
         });
       }
-    } catch (e) {
+    } on Exception catch (e) {
       setState(() {
-        _currentAddress = 'Unknown location';
+        _currentAddress = 'Unable to fetch address - tap to retry';
       });
+      debugPrint('Geocoding error: $e');
     }
   }
 

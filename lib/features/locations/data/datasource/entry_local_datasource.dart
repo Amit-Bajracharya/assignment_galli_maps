@@ -1,5 +1,5 @@
 import 'package:galli_maps_assignment/core/constants/app_constants.dart';
-import 'package:galli_maps_assignment/features/entry/data/models/entry_model.dart';
+import 'package:galli_maps_assignment/features/locations/data/models/entry_model.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 /// Direct interface to Hive local database.
